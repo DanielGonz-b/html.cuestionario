@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Cuestionario de Cultura General</title>
+  <style>
+    .correcta { color: green; font-weight: bold; }
+    .incorrecta { color: red; font-weight: bold; }
+  </style>
+</head>
+<body>
+  <h1>Cuestionario de Cultura General</h1>
+  <form id="quizForm">
+    <div>
+      <p>1. ¿Cuál es el océano más grande del mundo?</p>
+      <label><input type="radio" name="q1" value="A"> Océano Atlántico</label><br>
+      <label><input type="radio" name="q1" value="B"> Océano Índico</label><br>
+      <label><input type="radio" name="q1" value="C"> Océano Pacífico</label><br>
+    </div>
+
+    <div>
+      <p>2. ¿En qué país se encuentra la Torre Eiffel?</p>
+      <label><input type="radio" name="q2" value="A"> Italia</label><br>
+      <label><input type="radio" name="q2" value="B"> Francia</label><br>
+      <label><input type="radio" name="q2" value="C"> Alemania</label><br>
+    </div>
+
+    <div>
+      <p>3. ¿Quién pintó "La última cena"?</p>
+      <label><input type="radio" name="q3" value="A"> Miguel Ángel</label><br>
+      <label><input type="radio" name="q3" value="B"> Leonardo da Vinci</label><br>
+      <label><input type="radio" name="q3" value="C"> Rafael</label><br>
+    </div>
+
+    <div>
+      <p>4. ¿Cuál es el país más grande del mundo por superficie?</p>
+      <label><input type="radio" name="q4" value="A"> Canadá</label><br>
+      <label><input type="radio" name="q4" value="B"> Rusia</label><br>
+      <label><input type="radio" name="q4" value="C"> China</label><br>
+    </div>
+
+    <div>
+      <p>5. ¿Qué instrumento mide los sismos?</p>
+      <label><input type="radio" name="q5" value="A"> Barómetro</label><br>
+      <label><input type="radio" name="q5" value="B"> Termómetro</label><br>
+      <label><input type="radio" name="q5" value="C"> Sismógrafo</label><br>
+    </div>
+
+    <button type="button" onclick="calcularResultado()">Enviar</button>
+  </form>
+
+  <div id="resultado"></div>
+
+  <script>
+    function calcularResultado() {
+      const respuestasCorrectas = {
+        q1: 'C', // Océano Pacífico
+        q2: 'B', // Francia
+        q3: 'B', // Leonardo da Vinci
+        q4: 'B', // Rusia
+        q5: 'C'  // Sismógrafo
+      };
+
+      const resultadoDiv = document.getElementById('resultado');
+      resultadoDiv.innerHTML = '';
+
+      let score = 0;
+      let preguntasIncompletas = false;
+
+      for (let pregunta in respuestasCorrectas) {
+        const seleccion = document.querySelector(`input[name="${pregunta}"]:checked`);
+
+        if (!seleccion) {
+          preguntasIncompletas = true;
+          break;
+        }
+      }
+
+      if (preguntasIncompletas) {
+        resultadoDiv.innerHTML = `<p style="color: orange;">FAVOR DE RESPONDER TODAS LAS PREGUNTAS ANTES DE ENVIAR.</p>`;
+        return;
+      }
+
+      let resultadoHTML = '<h2>Resultados:</h2><ul>';
+      for (let pregunta in respuestasCorrectas) {
+        const seleccion = document.querySelector(`input[name="${pregunta}"]:checked`);
+        const esCorrecta = seleccion.value === respuestasCorrectas[pregunta];
+
+        if (esCorrecta) {
+          score++;
+          resultadoHTML += `<li class="correcta">✔ Pregunta ${pregunta.slice(1)}: Correcta</li>`;
+        } else {
+          resultadoHTML += `<li class="incorrecta">✘ Pregunta ${pregunta.slice(1)}: Incorrecta (Tu respuesta: ${seleccion.value}, Correcta: ${respuestasCorrectas[pregunta]})</li>`;
+        }
+      }
+
+      resultadoHTML += `</ul><p><strong>Puntaje final: ${score} / 5</strong></p>`;
+      resultadoDiv.innerHTML = resultadoHTML;
+    }
+  </script>
+</body>
+</html>
